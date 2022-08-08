@@ -66,5 +66,4 @@ BEGIN
 END;
 ' LANGUAGE plpgsql;
 
-call vacuumTables('a.b,b.c,c.d,d.e');  
 ```

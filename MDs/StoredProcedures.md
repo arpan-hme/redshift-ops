@@ -36,3 +36,35 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+
+* vacuum
+```
+CREATE OR REPLACE Procedure vacuumTables(upcList IN varchar(max))
+AS 'DECLARE
+  idx int;
+  slice varchar(8000);
+  upcListVar varchar(max);
+BEGIN
+  idx = 1;
+  upcListVar = upcList;
+  DROP TABLE if exists tmp_upc;
+  CREATE TEMP TABLE tmp_upc(upc varchar(14));
+  WHILE idx != 0 LOOP
+    idx = charindex('','', upcListVar);
+    IF idx != 0 THEN
+      slice = left(upcListVar, idx - 1);
+    END IF;
+    IF idx = 0 THEN
+      slice = upcListVar;
+    END IF;
+    IF len(slice) > 0 THEN
+      RAISE INFO ''vacuum FULL % '', slice;
+      EXECUTE 'VACUUM FULL ' || slice ;                                                            
+    END IF;
+    upcListVar = right(upcListVar, len(upcListVar) - idx);
+  END LOOP;
+END;
+' LANGUAGE plpgsql;
+
+call vacuumTables('a.b,b.c,c.d,d.e');  
+```

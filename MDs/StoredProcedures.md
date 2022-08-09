@@ -2,6 +2,8 @@
 
 * show procedure create_mv(varchar(100), varchar(500));
 * SELECT * FROM svl_stored_proc_messages ORDER BY recordtime desc;
+* GRANT EXECUTE ON PROCEDURE public.sp_user_hvc_info(INOUT rs_out refcursor) TO GROUP readers;
+* 
 * create_mv
 ```
 CREATE OR REPLACE PROCEDURE create_mv(name character varying(100),query character varying(10000)) AS $$

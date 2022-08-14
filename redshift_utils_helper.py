@@ -23,6 +23,7 @@ def put_metric(cw, namespace, metric_name, dimensions, timestamp, value, unit):
     }])
 
 # emit all the provided cloudwatch metrics consistent with API limits around batching
+
 def emit_metrics(cw, namespace, put_metrics):
     max_metrics = 20
     group = 0
@@ -44,6 +45,7 @@ def emit_metrics(cw, namespace, put_metrics):
             )
         except:
             print('Pushing metrics to CloudWatch failed: exception %s' % sys.exc_info()[1])
+
 
 def set_search_paths(conn, schema_name, set_target_schema=None, exclude_external_schemas=False):
     get_schemas_statement = '''

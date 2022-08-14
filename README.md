@@ -3,5 +3,5 @@
 * This repository contains commands along with logs of experiments done with Redshift.
 
 ## Command
-* --schema-name : schema containing table that needs to be vaccumed.
-* 
+* python analyze-vacuum-schema.py --output-file /Users/arpan/test.log --debug True  --ignore-errors False
+* python analyze-vacuum-schema.py --output-file /Users/arpan/test.log --debug True  --ignore-errors False --schema-name .

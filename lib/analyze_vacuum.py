@@ -503,7 +503,6 @@ def run_analyze(conn,
                                    schema_name,
                                    str(blacklisted_tables_array)[1:-1],)
 
-
     else:
         # query for all tables in the schema
         comment("Extracting Candidate Tables for analyze based on Query Optimizer Alerts...")
@@ -630,6 +629,7 @@ def run_analyze(conn,
 
 
 def run_analyze_vacuum(**kwargs):
+    print("in run_analyze")
     global debug
     if config_constants.DEBUG in os.environ:
         debug = os.environ[config_constants.DEBUG]
@@ -657,6 +657,7 @@ def run_analyze_vacuum(**kwargs):
         if debug:
             comment("Suppressing CloudWatch connection and metrics export")
 
+
     # # extract the cluster name
     # if config_constants.CLUSTER_NAME in kwargs:
     #     cluster_name = kwargs[config_constants.CLUSTER_NAME]
@@ -682,13 +683,14 @@ def run_analyze_vacuum(**kwargs):
 
     # get a connection for the controlling processes
     # secret = {
-    #         'host':'',
+    #         'host': 'host',
     #         'database': 'database',
     #         'username': 'username',
     #         'password': 'password'
     # }
 
     secret = get_secret()
+    cluster_name = secret['host']
     master_conn = get_rs_conn(secret['host'],
                               secret['database'],
                               secret['username'],

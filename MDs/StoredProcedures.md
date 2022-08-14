@@ -2,8 +2,11 @@
 
 * show procedure create_mv(varchar(100), varchar(500));
 * SELECT * FROM svl_stored_proc_messages ORDER BY recordtime desc;
+* GRANT EXECUTE ON PROCEDURE public.sp_user_hvc_info(INOUT rs_out refcursor) TO GROUP readers;
+* https://etl-sql.com/redshift-stored-procedure-for-beginners-with-example/
 * create_mv
-```CREATE OR REPLACE PROCEDURE create_mv(name character varying(100),query character varying(10000)) AS $$
+```
+CREATE OR REPLACE PROCEDURE create_mv(name character varying(100),query character varying(10000)) AS $$
 DECLARE 
 
 BEGIN 
@@ -20,7 +23,8 @@ $$ LANGUAGE plpgsql;
 
 * cancel_redshift_query
 
-```CREATE OR REPLACE PROCEDURE cancel_redshift_query() AS $$
+```
+CREATE OR REPLACE PROCEDURE cancel_redshift_query() AS $$
 DECLARE
   pids RECORD;
   counter INT;
@@ -35,4 +39,33 @@ BEGIN
   RETURN;
 END;
 $$ LANGUAGE plpgsql;
+```
+
+* vacuum
+```
+CREATE OR REPLACE Procedure vacuumTables(upcList IN varchar(max))
+AS 'DECLARE
+  idx int;
+  slice varchar(8000);
+  upcListVar varchar(max);
+BEGIN
+  idx = 1;
+  upcListVar = upcList;
+  WHILE idx != 0 LOOP
+    idx = charindex('','', upcListVar);
+    IF idx != 0 THEN
+      slice = left(upcListVar, idx - 1);
+    END IF;
+    IF idx = 0 THEN
+      slice = upcListVar;
+    END IF;
+    IF len(slice) > 0 THEN
+      RAISE INFO ''vacuum FULL % '', slice;
+      EXECUTE ''VACUUM FULL '' || slice ;
+    END IF;
+    upcListVar = right(upcListVar, len(upcListVar) - idx);
+  END LOOP;
+END;
+' LANGUAGE plpgsql;
+
 ```

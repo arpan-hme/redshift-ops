@@ -305,6 +305,7 @@ def run_vacuum(conn,
     comment("Found %s Tables requiring Vacuum and flagged by alert" % len(vacuum_statements))
 
     for vs in vacuum_statements:
+        comment("SQL Commands Generated: " + vs)
         statements.append(vs[0])
         statements.append("analyze %s.\"%s\"" % (vs[2], vs[1]))
 
@@ -575,6 +576,7 @@ def run_analyze(conn,
     analyze_statements = execute_query(conn, get_analyze_statement_feedback)
 
     for vs in analyze_statements:
+        comment("Analyzing for : " + vs)
         statements.append(vs[0])
 
     comment("Found %s Tables requiring Analysis" % len(statements))

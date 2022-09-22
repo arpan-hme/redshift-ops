@@ -7,3 +7,9 @@ iam_role 'arn:aws:iam::720256604387:role/redshift-s3-access'
 parallel off
 CSV;
 ```
+
+### Pivot
+```
+select * from (select userid, extract(DAY from CONVERT_TIMEZONE('Asia/Kolkata',starttime)) as dayy from stl_query) as a
+pivot ( count(*) as cnt for a.dayy in  (15,16,17,18,19,20,21));
+```

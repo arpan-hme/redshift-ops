@@ -10,6 +10,6 @@ CSV;
 
 ### Pivot
 ```
-select * from (select userid, extract(DAY from CONVERT_TIMEZONE('Asia/Kolkata',starttime)) as dayy from stl_query) as a
-pivot ( count(*) as cnt for a.dayy in  (15,16,17,18,19,20,21));
+"select * from (select usename, extract(DAY from CONVERT_TIMEZONE('Asia/Kolkata',starttime)) as dayy from stl_query join pg_user on usesysid = userid ) as a
+pivot ( count(*) as cnt for a.dayy in  (15,16,17,18,19,20,21));"
 ```

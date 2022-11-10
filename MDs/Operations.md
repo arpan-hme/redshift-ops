@@ -7,6 +7,30 @@ iam_role 'arn:aws:iam::720256604387:role/redshift-s3-access'
 parallel off
 CSV;
 ```
+### COPY from s3 to redshift table
+```
+create table scratch.remarketing_test_control_group
+(
+	email varchar(max),
+	first_name varchar(100),
+	last_name varchar(100),
+	phoneno varchar(100),
+	test_group_flag integer
+);
+
+
+COPY scratch.remarketing_test_control_group
+FROM
+  's3://healthifyme-table-dump/adhoc/file1.csv'
+  CREDENTIALS 'aws_access_key_id=<>;aws_secret_access_key=<>'
+  CSV
+  IGNOREHEADER 1;
+
+
+GRANT SELECT ON scratch.remarketing_test_control_group TO GROUP readers;
+select * from scratch.remarketing_test_control_group limit 4;
+
+```
 
 ### Pivot
 ```

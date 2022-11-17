@@ -69,3 +69,24 @@ END;
 ' LANGUAGE plpgsql;
 
 ```
+
+* cancel pq user
+```
+                                        
+CREATE OR REPLACE PROCEDURE cancel_metabase_pq() AS $$
+DECLARE
+  pids RECORD;
+  counter INT;
+BEGIN
+	RAISE INFO 'Killing queries..';
+    counter:=0;
+    FOR pids IN select pid from stv_recents where status = 'Running' and trim(user_name) = 'metabase_pq_user'  LOOP
+    EXECUTE 'CANCEL ' || pids.pid;
+    counter:= counter+1;
+  END LOOP;
+  RAISE INFO 'Killed Queries %', counter;
+  RETURN;
+END;
+$$ LANGUAGE plpgsql;
+       
+```

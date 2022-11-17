@@ -37,3 +37,11 @@ select * from scratch.remarketing_test_control_group limit 4;
 "select * from (select usename, extract(DAY from CONVERT_TIMEZONE('Asia/Kolkata',starttime)) as dayy from stl_query join pg_user on usesysid = userid ) as a
 pivot ( count(*) as cnt for a.dayy in  (15,16,17,18,19,20,21));"
 ```
+
+### Get user with group name
+```
+SELECT usename, groname 
+FROM pg_user, pg_group
+WHERE pg_user.usesysid = ANY(pg_group.grolist)
+AND pg_group.groname in (SELECT DISTINCT pg_group.groname from pg_group);
+```

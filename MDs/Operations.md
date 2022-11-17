@@ -52,3 +52,22 @@ call cancel_redshift_query_all();
 call cancel_anomalisa();
 call cancel_metabase_pq();  
 ```
+
+
+### Mongo Dump to Redshift
+```
+CREATE TABLE adhoc_sheets.analytics_apple_asa_campaign_report_stage (LIKE adhoc_sheets.analytics_apple_asa_campaign_report);
+
+COPY adhoc_sheets.analytics_apple_asa_campaign_report_stage
+FROM 's3://healthifyme-table-dump/adhoc/asa_history.csv'
+  CREDENTIALS 'aws_access_key_id=AKIA2PMVDTDR22SS5VSB;aws_secret_access_key=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'
+  CSV
+  IGNOREHEADER 1;                                      
+
+BEGIN TRANSACTION;
+INSERT INTO adhoc_sheets.analytics_apple_asa_campaign_report
+SELECT * FROM adhoc_sheets.analytics_apple_asa_campaign_report_stage;
+END TRANSACTION;
+DROP TABLE adhoc_sheets.analytics_apple_asa_campaign_report_stage;
+
+```
